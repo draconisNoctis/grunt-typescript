@@ -137,6 +137,18 @@ function prepareModule(opt) {
     }
     return result;
 }
+function prepareModuleResolution(opt) {
+    var result = 1 /* Classic */;
+    if (opt.moduleResolution) {
+        switch (('' + opt.moduleResolution).toLowerCase()) {
+            case 'node':
+            case 'nodejs':
+                result = 2 /* NodeJs */;
+                break;
+        }
+    }
+    return result;
+}
 function prepareNewLine(opt) {
     var result = undefined;
     if (opt.newLine) {
@@ -239,6 +251,7 @@ function createGruntOption(source, grunt, gruntFile, logger) {
             target: targetVersion,
             rootDir: rootDir,
             module: prepareModule(source),
+            moduleResolution: prepareModuleResolution(source),
             preserveConstEnums: boolOrUndef(source, "preserveConstEnums"),
             noEmitOnError: boolOrUndef(source, "noEmitOnError", true),
             suppressImplicitAnyIndexErrors: boolOrUndef(source, "suppressImplicitAnyIndexErrors"),
@@ -248,7 +261,8 @@ function createGruntOption(source, grunt, gruntFile, logger) {
             inlineSourceMap: boolOrUndef(source, "inlineSourceMap"),
             inlineSources: boolOrUndef(source, "inlineSources"),
             noEmitHelpers: boolOrUndef(source, "noEmitHelpers"),
-            jsx: prepareJsx(source)
+            jsx: prepareJsx(source),
+            experimentalAsyncFunctions: boolOrUndef(source, "experimentalAsyncFunctions")
         }
     };
     logger.verbose("--option");
