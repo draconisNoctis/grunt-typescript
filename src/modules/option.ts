@@ -154,6 +154,19 @@ function prepareModule(opt: any): ts.ModuleKind {
     return result;
 }
 
+function prepareModuleResolution(opt: any): ts.ModuleResolutionKind {
+    let result:ts.ModuleResolutionKind = ts.ModuleResolutionKind.Classic;
+    if(opt.moduleResolution) {
+        switch(('' + opt.moduleResolution).toLowerCase()) {
+            case 'node':
+            case 'nodejs':
+                result = ts.ModuleResolutionKind.NodeJs;
+                break;
+        }
+    }
+    return result;
+}
+
 function prepareNewLine(opt: any): ts.NewLineKind {
     let result: ts.NewLineKind = undefined;
     if(opt.newLine) {
@@ -272,6 +285,7 @@ export function createGruntOption(source: any, grunt: IGrunt, gruntFile: grunt.f
             target: targetVersion,
             rootDir: rootDir,
             module: prepareModule(source),
+            moduleResolution: prepareModuleResolution(source),
             preserveConstEnums: boolOrUndef(source, "preserveConstEnums"),
             noEmitOnError: boolOrUndef(source, "noEmitOnError", true),
             suppressImplicitAnyIndexErrors: boolOrUndef(source, "suppressImplicitAnyIndexErrors"),
